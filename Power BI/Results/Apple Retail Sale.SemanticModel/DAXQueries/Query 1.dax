@@ -1,0 +1,10 @@
+
+CALCULATE(
+    VALUES('sales'[Product_Name]),
+    TOPN(
+        1,
+        ALL('sales'[Product_Name]),
+        SUM('sales'[Sales]),
+        DESC
+    )
+)

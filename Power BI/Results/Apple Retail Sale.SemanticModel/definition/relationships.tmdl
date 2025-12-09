@@ -1,0 +1,44 @@
+relationship 5cdd31da-52ea-4e05-91ff-6ddf1c210a1d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: sales.Launch_Date
+	toColumn: LocalDateTable_be714883-66f5-4c1a-8ffd-18ee6357700f.Date
+
+relationship c51247a1-683d-4949-a344-1f37a677673e
+	joinOnDateBehavior: datePartOnly
+	fromColumn: warranty.Claim_Date
+	toColumn: LocalDateTable_a00715d5-4890-41e1-8107-e5564ee9646e.Date
+
+relationship 5b0eb44e-371d-f54c-3d46-582296f72936
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: sales.Sale_ID
+	toColumn: warranty.Sale_ID
+
+relationship 11ad6f01-0a47-40db-80da-d1001ad6f669
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Products (Abdallah)'.Launch_Date
+	toColumn: LocalDateTable_6b055ecf-1c43-4e5d-8a69-c4353c4c85a2.Date
+
+relationship 2c29aedf-1454-0721-8c38-d23d4b8cea14
+	fromColumn: sales.Product_ID
+	toColumn: 'Products (Abdallah)'.Product_ID
+
+relationship 28f94f53-cda0-4ffd-be3c-929a8c0f0666
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Running_Date (Abdallah)'.Date
+	toColumn: LocalDateTable_8899f6d4-ad28-452d-abf3-4c7edebc459b.Date
+
+relationship d8cabbab-92b5-c78c-b6e3-64357c724484
+	fromColumn: sales.Sale_Date
+	toColumn: 'Running_Date (Abdallah)'.Date
+
+relationship 39f1305f-c701-4ec5-bd24-a80dc3ee7717
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Laptop_Desktop_Sales.Sale_Date
+	toColumn: LocalDateTable_09eaf5b1-8607-48a9-b922-f5353fd73f48.Date
+
+relationship 9e6d3cd0-f9de-440b-b60a-9f47a7cd05ad
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Laptop_Desktop_Sales.Launch_Date
+	toColumn: LocalDateTable_d6b996eb-5db8-4944-b8b8-edf79f8f066d.Date
+

@@ -1,0 +1,737 @@
+table sales
+	lineageTag: be291d41-3f67-4938-9835-f40e279c1b15
+
+	measure 'Total Sales Quantity_ALI_FADLOUN' = SUM(Sales[quantity])
+		formatString: 0
+		lineageTag: cc51b92d-c546-4c05-bb50-0399f278edfb
+
+	measure 'Avg Price_ALI_FADLOUN' = ```
+			AVERAGE(sales[Unit_Price])
+			
+			```
+		lineageTag: 0a090caa-e35b-4f49-9b7a-4cd15cd869b0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Distinct Products_ALI_FADLOUN' = DISTINCTCOUNT(Sales[product_id])
+		formatString: 0
+		lineageTag: d33f06c1-2a4d-44e8-a9bb-1034d7460ead
+
+	measure 'Most Ordered store_ALI_FADLOUN' = ```
+			
+			CALCULATE(
+			    SELECTEDVALUE(Sales[Store_Name]),
+			    TOPN(1, VALUES(Sales[Store_Name]), [Total Sales Quantity_ALI_FADLOUN], DESC)
+			)
+			
+			```
+		lineageTag: 0f140a28-460a-4132-af60-222a0fbc2e16
+
+	measure 'Top Selling Product_ALI_FADLOUN' = ```
+			
+			CALCULATE(SELECTEDVALUE(Sales[Product_Name]),TOPN(1, VALUES(Sales[Product_Name]),[Total Revenue_ALI_FADLOUN], DESC))
+			
+			```
+		lineageTag: 0a34ad60-b08c-4a35-b386-2d5340ada743
+
+	measure 'Most Ordered Product_ALI_FADLOUN' = ```
+			
+			CALCULATE(SELECTEDVALUE(Sales[Product_Name]),TOPN(1, VALUES(Sales[Product_Name]), [Total Sales Quantity_ALI_FADLOUN], DESC))
+			
+			```
+		lineageTag: 16ea68cd-93e1-4763-bf8b-24f10bab9cd8
+
+	measure 'Average Profit per Product per Sale _ALI_FADLOUN' = ```
+			
+			DIVIDE([Total Revenue_ALI_FADLOUN], [Total Sales Quantity_ALI_FADLOUN])
+			
+			```
+		lineageTag: e9d6ea71-6a72-42f9-9f2a-dea5d4c59bed
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Revenue_ALI_FADLOUN' = ```
+			SUMX(Sales, Sales[quantity] * sales[Unit_Price])
+			
+			```
+		formatString: 0
+		lineageTag: eb0be1e7-5006-405a-b6fb-c193e8f43ca1
+
+	measure 'Top Selling store_ALI_FADLOUN' = ```
+			
+			CALCULATE(
+			    SELECTEDVALUE(sales[Store_Name]),
+			    TOPN(1, VALUES(Sales[Store_Name]),[Total Revenue_ALI_FADLOUN], DESC)
+			)
+			
+			```
+		lineageTag: e4119a03-4f52-49ad-8179-6eb9a62a262d
+
+	measure 'Distinct store_ALI_FADLOUN' = DISTINCTCOUNT(sales[Store_ID])
+		formatString: 0
+		lineageTag: a935daae-7e07-4201-a2da-999f4e6bb1e9
+
+	measure 'Running Total (Abdallah)' =
+			CALCULATE(
+			    SUM(sales[Sales]),
+			    FILTER(
+			        ALL('Running_Date (Abdallah)'[Date]),
+			        'Running_Date (Abdallah)'[Date] <= MAX(sales[Sale_Date])
+			    )
+			)
+		formatString: 0
+		lineageTag: 28ec9166-7a90-4881-8067-df4aa20ca6e0
+
+	measure 'Cumulative Revenue Product (Abdallah)' =
+			
+			VAR CuurentTotalRevenue = [Total Revenue sum (Abdallah)]
+			RETURN
+			    CALCULATE(
+			        [Total Revenue sum (Abdallah)],
+			        FILTER(
+			            ALL('Products (Abdallah)'[Product_Name]),
+			            [Total Revenue sum (Abdallah)] >= CuurentTotalRevenue
+			        )
+			    )
+		formatString: 0
+		lineageTag: 8c8dfc96-07ba-4319-af3b-c99d8165c324
+
+	measure 'Total Revenue All Products (Abdallah)' =
+			
+			CALCULATE(
+			    SUM(sales[Sales]),
+			    ALL('Products (Abdallah)')
+			)
+		formatString: 0
+		lineageTag: 7a780806-38d2-4f02-abe2-7b89f19b03fc
+
+	measure 'Pareto Perc. Product (Abdallah)' = DIVIDE([Cumulative Revenue Product (Abdallah)], [Total Revenue All Products (Abdallah)])
+		lineageTag: 9414e63f-bd81-4fc2-bdb4-46636a3b4fb9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Revenue sum (Abdallah)' = SUM(sales[Sales])
+		formatString: 0
+		lineageTag: 09cb3406-8b36-4656-b665-1931574e29b3
+
+	measure 'perc80 Product (Abdallah)' = [Max Product Sale (Abdallah)] * 0.8
+		lineageTag: 2b614fbb-a4d2-4c42-99e3-08b12940ecc4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Top Revenue Product (Abdallah)' = ```
+			
+			    TOPN(1,
+			        ALLSELECTED('Products (Abdallah)'[Product_Name]),
+			        [Total Revenue sum (Abdallah)],
+			        DESC
+			    )
+			```
+		lineageTag: 59c56f95-e266-41e1-8e0b-853d9be8a699
+
+	measure 'Max Product Sale (Abdallah)' =
+			
+			CALCULATE(
+			    [Total Revenue sum (Abdallah)],
+			    FILTER(
+			        ALL('Products (Abdallah)'[Product_Name]),
+			        'Products (Abdallah)'[Product_Name] == [Top Revenue Product (Abdallah)]
+			    )
+			)
+		formatString: 0
+		lineageTag: 934794c1-e427-47f0-8e35-98ceed921a7d
+
+	measure 'Total quantity sum (Abdallah)' = SUM(sales[Quantity])
+		formatString: 0
+		lineageTag: 001939fc-71c2-4255-8dab-fad85c098157
+
+	measure 'Top sold Product (Abdallah)' = ```
+			
+			    TOPN(1,
+			        ALLSELECTED('Products (Abdallah)'[Product_Name]),
+			        [Total quantity sum (Abdallah)],
+			        DESC
+			    )
+			```
+		lineageTag: 8bf148a5-838b-443b-9019-8adcb3f7e171
+
+	measure 'Total ordered sum (Abdallah)' = DISTINCTCOUNT(sales[Sale_ID])
+		formatString: 0
+		lineageTag: d89431b5-94f7-4e9e-a14d-dfd815218840
+
+	measure 'Top Ordered Product (Abdallah)' = ```
+			
+			    TOPN(1,
+			        ALLSELECTED('Products (Abdallah)'[Product_Name]),
+			        [Total ordered sum (Abdallah)],
+			        DESC
+			    )
+			```
+		lineageTag: 1a82fd05-86e4-4bdf-ba23-0e694d458981
+
+	measure 'Top sold Category (Abdallah)' = ```
+			
+			    TOPN(1,
+			        ALLSELECTED(sales[Corrected_Categories]),
+			        [Total quantity sum (Abdallah)],
+			        DESC
+			    )
+			```
+		lineageTag: feba3875-cb34-4660-8e3b-86414e175b84
+
+	measure 'Top Revenue Category (Abdallah)' = ```
+			
+			    TOPN(1,
+			        ALLSELECTED(sales[Corrected_Categories]),
+			        [Total Revenue sum (Abdallah)],
+			        DESC
+			    )
+			```
+		lineageTag: 6b6290ac-585b-4218-b4bd-57251414b0b1
+
+	measure 'Top Ordered Category (Abdallah)' = ```
+			
+			    TOPN(1,
+			        ALLSELECTED(sales[Corrected_Categories]),
+			        [Total ordered sum (Abdallah)],
+			        DESC
+			    )
+			```
+		lineageTag: 645428a6-4734-494c-87bb-a15a8e6e1d59
+
+	measure 'Cumulative Revenue Category (Abdallah)' =
+			
+			VAR CuurentTotalRevenue = [Total Revenue sum (Abdallah)]
+			RETURN
+			    CALCULATE(
+			        [Total Revenue sum (Abdallah)],
+			        FILTER(
+			            ALL(sales[Corrected_Categories]),
+			            [Total Revenue sum (Abdallah)] >= CuurentTotalRevenue
+			        )
+			    )
+		formatString: 0
+		lineageTag: e47440fc-1cd9-4835-99c8-ca213c8f4c28
+
+	measure 'Total Revenue All Category (Abdallah)' =
+			
+			CALCULATE(
+			    SUM(sales[Sales]),
+			    ALL(sales[Corrected_Categories])
+			)
+		formatString: 0
+		lineageTag: a7617b44-d110-4b31-bcb3-d06a1f3b8bf1
+
+	measure 'Pareto Perc. Category (Abdallah)' = DIVIDE([Cumulative Revenue Category (Abdallah)], [Total Revenue All Category (Abdallah)])
+		lineageTag: b90aa0f2-36d3-4911-8f93-9ea7ac601a4b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Max Category Sale (Abdallah)' =
+			
+			CALCULATE(
+			    [Total Revenue sum (Abdallah)],
+			    FILTER(
+			        ALL(sales[Corrected_Categories]),
+			        sales[Corrected_Categories] == [Top Revenue Category (Abdallah)]
+			    )
+			)
+		formatString: 0
+		lineageTag: 64290323-1bc8-45d5-904c-0b9be79774e1
+
+	measure 'perc80 Category (Abdallah)' = [Max Category Sale (Abdallah)] * 0.8
+		lineageTag: 89bf6484-11e9-4029-941b-426fdb875482
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Historical Max Sales (Abdallah)' = ```
+			
+			VAR CurrentYear = MAX('Running_Date (Abdallah)'[Year])
+			
+			VAR AllHistoricalYears = 
+			    FILTER(
+			        ALL('Running_Date (Abdallah)'[Year]),
+			        'Running_Date (Abdallah)'[Year] < CurrentYear
+			    )
+			    
+			RETURN
+			    MAXX(
+			        AllHistoricalYears,
+			        [Total Revenue sum (Abdallah)]
+			    )
+			```
+		formatString: 0
+		lineageTag: c76ac7b7-7be8-4572-a0be-6439a393f693
+
+	measure 'Scatter X-Axis Min (Abdallah)' = ```
+			
+			MINX(
+			    VALUES('Products (Abdallah)'[Product_Name]), 
+			    [Total quantity sum (Abdallah)]
+			) * 0.98
+			```
+		lineageTag: 51632d59-77d0-4f2c-bce9-35f3082a6149
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Scatter X-Axis Max (Abdallah)' = ```
+			
+			MAXX(
+			    VALUES('Products (Abdallah)'[Product_Name]), 
+			    [Total quantity sum (Abdallah)]
+			) * 1.02
+			```
+		lineageTag: bb172407-657e-41aa-a3fe-ba7b83e3d0e3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Scatter Y-Axis Min (Abdallah)' = ```
+			
+			MINX(
+			    VALUES('Products (Abdallah)'[Product_Name]), 
+			    [Average Price (Abdallah)]
+			) * 0.6
+			```
+		lineageTag: 9b177487-ce58-4077-adf1-575d30b89010
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Scatter Y-Axis Max (Abdallah)' = ```
+			
+			MAXX(
+			    VALUES('Products (Abdallah)'[Product_Name]), 
+			    [Average Price (Abdallah)]
+			) * 1.2
+			```
+		lineageTag: 5086b48a-87d8-4ce6-894f-9a1781990dc5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Price (Abdallah)' = AVERAGE(sales[Unit_Price])
+		lineageTag: 920874de-80d2-4a5c-8e54-467f9de0a802
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'YoY Growth %' =
+			
+			DIVIDE(
+			    [TotalSales_NoCategoryFilter]-
+			CALCULATE(
+			  [TotalSales_NoCategoryFilter],
+			    SAMEPERIODLASTYEAR('sales'[Sale_Date])
+			),
+			   CALCULATE( [TotalSales_NoCategoryFilter],
+			    SAMEPERIODLASTYEAR('sales'[Sale_Date])
+			),"hghgh")
+		lineageTag: 11f1b54a-5ada-4090-90d1-d69140a91b95
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure TotalSales_NoCategoryFilter = CALCULATE( SUM(sales[Sales]), ALL( sales[Category_Name]) )
+		formatString: 0
+		lineageTag: 7d98a86f-8c53-406b-9e4e-ba9117909742
+
+	measure 'Total Sales Amount' = ```
+			SUMX(Sales, Sales[Quantity] * Sales[Unit_Price])
+			
+			```
+		formatString: 0
+		lineageTag: 438e6b45-6afe-488b-b18d-3431b1f622af
+
+	measure 'Laptop Sales' = ```
+			
+			CALCULATE(
+			    [Total Sales Amount],
+			    Sales[Category_Name] = "Laptop"
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 73f48feb-06f2-4ee3-854c-8923b8000012
+
+	measure 'Desktop Sales' = ```
+			
+			CALCULATE(
+			    [Total Sales Amount],
+			    Sales[Category_Name] = "Desktop"
+			)
+			
+			```
+		formatString: 0
+		lineageTag: e341483d-230f-4ed7-a421-0fd80bf3ca38
+
+	measure 'Sales Difference (Laptop - Desktop)' = ```
+			
+			[Laptop Sales] - [Desktop Sales]
+			
+			```
+		formatString: 0
+		lineageTag: fd0a0642-8bca-46c9-a245-49acf3a02930
+
+	measure 'Laptop Sales %' = ```
+			
+			DIVIDE([Laptop Sales], [Laptop Sales] + [Desktop Sales])
+			
+			
+			
+			```
+		lineageTag: a93e608b-784b-46f2-ac1e-2ca9317f6280
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Desktop Sales %' = DIVIDE([Desktop Sales],[Laptop Sales]+[Desktop Sales])
+		lineageTag: d934e804-ea84-4682-8917-0fcfcc3ed76c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Laptop Sales Growth %' = ```
+			
+			VAR CurrentYearSales = [Laptop Sales]
+			VAR PreviousYearSales =
+			    CALCULATE(
+			        [Laptop Sales],
+			        DATEADD('sales'[Sale_Date], -1, YEAR)
+			    )
+			RETURN
+			DIVIDE(CurrentYearSales - PreviousYearSales, PreviousYearSales)
+			
+			```
+		lineageTag: 9f2437dd-95ff-4d3d-b6e9-c907ee310395
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Desktop Sales Growth %' = ```
+			
+			VAR CurrentYearSales = [Desktop Sales]
+			VAR PreviousYearSales = CALCULATE(
+			   [Desktop Sales],
+			    DATEADD('sales'[Sale_Date], -1, YEAR)
+			)
+			RETURN
+			DIVIDE(CurrentYearSales - PreviousYearSales, PreviousYearSales)
+			
+			```
+		lineageTag: ea089d69-0349-4a43-93b1-1dcb4ec0ad7d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Claim Rate' = DIVIDE(COUNT(warranty[Claim_ID]),SUM(sales[Quantity]),0)*100
+		lineageTag: e2da21b9-b039-4e6d-a24a-cd9690ac8751
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Avg Selling Price.Yara' = DIVIDE([Total Sales.Yara],[Total Quantity Sold.Yara])
+		lineageTag: e7f66f3f-da09-4de5-8c89-c92d8f6436e3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Sales.Yara' = ```
+			SUM(sales[Sales]) 
+			```
+		formatString: 0
+		lineageTag: 29d2d664-9741-4520-965a-eae9faac3dd7
+
+	measure 'Total Quantity Sold.Yara' = ```
+			SUM(sales[Quantity]) 
+			```
+		formatString: 0
+		lineageTag: 8645d22d-5f81-4c4a-bffe-7b7cf0c49dd7
+
+	column Sale_ID
+		dataType: string
+		lineageTag: c922dda5-b7de-451d-86e7-c7435df57e77
+		summarizeBy: none
+		sourceColumn: Sale_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sale_Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 23441c45-f4f6-4ab7-b06b-adb13f9e014c
+		summarizeBy: none
+		sourceColumn: Sale_Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Store_ID
+		dataType: string
+		lineageTag: e6ca4e80-5068-4863-ace6-0b4e0395675e
+		summarizeBy: none
+		sourceColumn: Store_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product_ID
+		dataType: string
+		lineageTag: 5377c588-7df2-469b-8cc1-20a923aeab5c
+		summarizeBy: none
+		sourceColumn: Product_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 3bc1da96-faed-444b-851f-43c1cf021919
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column Store_Name
+		dataType: string
+		lineageTag: 331caf8c-536c-43b7-8960-f78b143d17d3
+		summarizeBy: none
+		sourceColumn: Store_Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		lineageTag: 6d6e2a40-d734-4a5a-8f12-e7326bbfa682
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: 55b27aa5-7b8e-4c60-b0bb-1ba139bc1e2d
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product_Name
+		dataType: string
+		lineageTag: 1f4f6851-86d6-4b00-b25b-3faf64664caf
+		summarizeBy: none
+		sourceColumn: Product_Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category_ID
+		dataType: string
+		lineageTag: fd4e6e80-ec64-48aa-b7ff-b812acf6c90f
+		summarizeBy: none
+		sourceColumn: Category_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Launch_Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: d42ebe1b-7d00-4935-b7ea-34f3a27b93e3
+		summarizeBy: none
+		sourceColumn: Launch_Date
+
+		variation Variation
+			isDefault
+			relationship: 5cdd31da-52ea-4e05-91ff-6ddf1c210a1d
+			defaultHierarchy: LocalDateTable_be714883-66f5-4c1a-8ffd-18ee6357700f.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Unit_Price
+		dataType: int64
+		formatString: 0
+		lineageTag: e6f4c0e0-0dfc-4a02-8c56-0f0732e24e3c
+		summarizeBy: sum
+		sourceColumn: Unit_Price
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category_Name
+		dataType: string
+		lineageTag: fd2655d5-cb27-445a-a629-6690b3979a0e
+		summarizeBy: none
+		sourceColumn: Category_Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sales = sales[Unit_Price] * sales[Quantity]
+		formatString: 0
+		lineageTag: 9f3c922e-7c61-4756-8ae2-c147ec50cfd2
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sale Month_ALI_FADLOUN' = MONTH(Sales[sale_date])
+		formatString: 0
+		lineageTag: 7c94b28f-d82c-4051-99ec-a5b36d09887e
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sale Year_ALI_FADLOUN' = ```
+			YEAR(Sales[sale_date])
+			
+			```
+		formatString: 0
+		lineageTag: 4f72a35a-cf3a-4bf2-ae40-d515b29d033b
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sale MonthName_ALI_FADLOUN' = ```
+			FORMAT(Sales[sale_date], "MMMM")
+			
+			```
+		lineageTag: 6c57ed3e-0165-4152-b74c-6933a1253ecb
+		summarizeBy: none
+		sortByColumn: 'Sale Month_ALI_FADLOUN'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sale day_ALI_FADLOUN' = DAY(Sales[sale_date])
+		formatString: 0
+		lineageTag: 268aa723-122f-4a39-8777-98cb28f86ce8
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column Corrected_Categories
+		dataType: string
+		lineageTag: 56f4feb4-275d-4039-bad9-dda2af118beb
+		summarizeBy: none
+		sourceColumn: Corrected_Categories
+
+		annotation SummarizationSetBy = Automatic
+
+	column Corrected_Category_ID
+		dataType: string
+		lineageTag: e617596f-6cda-4b58-b5d4-4a1ec0f406dd
+		summarizeBy: none
+		sourceColumn: Corrected_Category_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Price Category.Yara' = SWITCH(TRUE(),sales[Unit_Price]>=1000, "High Price", sales[Unit_Price]>=500,"Medium Price","Low Price")
+		lineageTag: 1c23949a-202e-455e-9d1e-f45e03277d4d
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy 'Country Hierarchy'
+		lineageTag: fbf26adf-7338-4663-a89d-8c264fa26549
+
+		level Country
+			lineageTag: b7f79e57-35b1-4ca8-9df5-556d4d2e0aac
+			column: Country
+
+		level City
+			lineageTag: eb469ea2-701c-420c-b80a-5ec4f7b5f755
+			column: City
+
+	partition sales = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("F:\My Project\DEPI-Project\Raw Data\sales.csv"),[Delimiter=",", Columns=13, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"sale_id", type text}, {"sale_date", type text}, {"store_id", type text}, {"product_id", type text}, {"quantity", Int64.Type}, {"Store_Name", type text}, {"City", type text}, {"Country", type text}, {"Product_Name", type text}, {"Category_ID", type text}, {"Launch_Date", type date}, {"Price", Int64.Type}, {"category_name", type text}}),
+				    #"Renamed Some Columns" = Table.RenameColumns(#"Changed Type",{{"sale_id", "Sale_ID"}, {"sale_date", "Sale_Date"}, {"store_id", "Store_ID"}, {"product_id", "Product_ID"}, {"quantity", "Quantity"}, {"category_name", "Category_Name"}, {"Price", "Unit_Price"}}),
+				    #"Changed 'Sale_Date' Type" = Table.TransformColumnTypes(#"Renamed Some Columns", {{"Sale_Date", type date}}, "en-AE"),
+				    #"Cleaned 'Catergory_Name' (Trim)" = Table.TransformColumns(#"Changed 'Sale_Date' Type",{{"Category_Name", Text.Trim, type text}}),
+				    #"Cleaned 'Category_Name' (Capitalized)" = Table.TransformColumns(#"Cleaned 'Catergory_Name' (Trim)",{{"Category_Name", Text.Proper, type text}}),
+				    #"Cleaned 'Product_Name' (Trim)" = Table.TransformColumns(#"Cleaned 'Category_Name' (Capitalized)",{{"Product_Name", Text.Trim, type text}}),
+				    #"Lowercased 'Product_Name' for Cleaning" = Table.TransformColumns(#"Cleaned 'Product_Name' (Trim)",{{"Product_Name", Text.Lower, type text}}),
+				    #"Cleaned 'Product_Name' (Fix ""appel"")" = Table.ReplaceValue(#"Lowercased 'Product_Name' for Cleaning","appel","apple",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""t+v"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""appel"")","t+v","tv+",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""por"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""t+v"")","por","pro",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""aiprods"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""por"")","aiprods","airpods",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix "" )"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""aiprods"")"," )",")",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""geneartion"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix "" )"")","genreation","generation",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""pecnil"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""geneartion"")","pecnil","pencil",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""beat s"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""pecnil"")","beat s","beats ",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""silicnoe"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""beat s"")","silicnoe","silicone",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix "" rpo"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""silicnoe"")"," rpo"," pro",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""boo k"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix "" rpo"")","boo k","book ",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""129."")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""boo k"")","129.","12.9",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""otuch"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""129."")","otuch","touch",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""m ouse"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""otuch"")","m ouse"," mouse",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""obok"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""m ouse"")","obok","book",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""lightnnig"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""obok"")","lightnnig","lightning",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""pda"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""lightnnig"")","pda","pad",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""s e"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""pda"")","s e"," se",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""imni"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""s e"")","imni","mini",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""5t h"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""imni"")","5t h","5th ",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""nich"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""5t h"")","nich","inch",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""1 2 "")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""nich"")","1 2 "," 12 ",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""boko"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""1 2 "")","boko","book",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""icolud"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""boko"")","icolud","icloud",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""mnii"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""icolud"")","mnii","mini",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""wacth"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""mnii"")","wacth","watch",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""( "")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""wacth"")","( "," (",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""geenration"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""( "")","geenration","generation",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""ohme"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""geenration"")","ohme","home",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""ofr"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""ohme"")","ofr","for",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""w atch"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""ofr"")","w atch"," watch",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""watc h"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""w atch"")","watc h","watch ",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""chagrer"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""watc h"")","chagrer","charger",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""chrager"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""chagrer"")","chrager","charger",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""retian"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""chrager"")","retian","retina",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""paple"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""retian"")","paple","apple",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""2("")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""paple"")","2(","(2",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""m(2)"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""2("")","m(2)","(m2)",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""tsudio"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""m(2)"")","tsudio","studio",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""samrt"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""tsudio"")","samrt","smart",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""a ir"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""samrt"")","a ir"," air",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""beast"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""a ir"")","beast","beats",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""leahter"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""beast"")","leahter","leather",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""ihpone"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""leahter"")","ihpone","iphone",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""hompeod"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""ihpone"")","hompeod","homepod",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""stduio"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""hompeod"")","stduio","studio",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix ""icnh"")" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""stduio"")","icnh","inch",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Product_Name' (Fix 'mgaic')" = Table.ReplaceValue(#"Cleaned 'Product_Name' (Fix ""icnh"")","mgaic","magic",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Decorated 'Product_Name' (Capitalized)" = Table.TransformColumns(#"Cleaned 'Product_Name' (Fix 'mgaic')",{{"Product_Name", Text.Proper, type text}}),
+				    #"Decorated 'Product_Name' (Fix ""Airpods"")" = Table.ReplaceValue(#"Decorated 'Product_Name' (Capitalized)","Airpods","AirPods",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Decorated 'Product_Name' (Fix ""Iphone"")" = Table.ReplaceValue(#"Decorated 'Product_Name' (Fix ""Airpods"")","Iphone","iPhone",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Decorated 'Product_Name' (Fix ""For"")" = Table.ReplaceValue(#"Decorated 'Product_Name' (Fix ""Iphone"")","For","for",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Decorated 'Product_Name' (Fix ""Ipad"")" = Table.ReplaceValue(#"Decorated 'Product_Name' (Fix ""For"")","Ipad","iPad",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Decorated 'Product_Name' (Fix ""Imac"")" = Table.ReplaceValue(#"Decorated 'Product_Name' (Fix ""Ipad"")","Imac","iMac",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Decorated 'Product_Name' (Fix ""With"")" = Table.ReplaceValue(#"Decorated 'Product_Name' (Fix ""Imac"")","With","with",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Decorated 'Product_Name' (Fix ""1St"")" = Table.ReplaceValue(#"Decorated 'Product_Name' (Fix ""With"")","1St","1st",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Decorated 'Product_Name' (Fix ""2Nd"")" = Table.ReplaceValue(#"Decorated 'Product_Name' (Fix ""1St"")","2Nd","2nd",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Decorated 'Product_Name' (Fix ""3Rd"")" = Table.ReplaceValue(#"Decorated 'Product_Name' (Fix ""2Nd"")","3Rd","3rd",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Decorated 'Product_Name' (Fix ""Th "")" = Table.ReplaceValue(#"Decorated 'Product_Name' (Fix ""3Rd"")","Th ","th ",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Decorated 'Product_Name' (Fix ""Airtag"")" = Table.ReplaceValue(#"Decorated 'Product_Name' (Fix ""Th "")","Airtag","AirTag",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Decorated 'Product_Name' (Fix ""Tv"")" = Table.ReplaceValue(#"Decorated 'Product_Name' (Fix ""Airtag"")","Tv","TV",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Decorated 'Product_Name' (Fix "" Hd"")" = Table.ReplaceValue(#"Decorated 'Product_Name' (Fix ""Tv"")"," Hd"," HD",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Decorated 'Product_Name' (Fix ""Macbook"")" = Table.ReplaceValue(#"Decorated 'Product_Name' (Fix "" Hd"")","Macbook","MacBook",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Decorated 'Product_Name' (Fix ""-Inch"")" = Table.ReplaceValue(#"Decorated 'Product_Name' (Fix ""Macbook"")","-Inch","-inch",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Decorated 'Product_Name' (Fix "" Se"")" = Table.ReplaceValue(#"Decorated 'Product_Name' (Fix ""-Inch"")"," Se"," SE",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Decorated 'Product_Name' (Fix ""SEries"")" = Table.ReplaceValue(#"Decorated 'Product_Name' (Fix "" Se"")","SEries","Series",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Decorated 'Product_Name' (Fix ""Icloud"")" = Table.ReplaceValue(#"Decorated 'Product_Name' (Fix ""SEries"")","Icloud","iCloud",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Decorated 'Product_Name' (Fix ""Mini"")" = Table.ReplaceValue(#"Decorated 'Product_Name' (Fix ""Icloud"")","Mini","mini",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Decorated 'Product_Name' (Fix ""Usb"")" = Table.ReplaceValue(#"Decorated 'Product_Name' (Fix ""Mini"")","Usb","USB",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Decorated 'Product_Name' (Fix ""Homepod"")" = Table.ReplaceValue(#"Decorated 'Product_Name' (Fix ""Usb"")","Homepod","HomePod",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Decorated 'Product_Name' (Fix ""Magsafe"")" = Table.ReplaceValue(#"Decorated 'Product_Name' (Fix ""Homepod"")","Magsafe","MagSafe",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Decorated 'Product_Name' (Fix ""Id"")" = Table.ReplaceValue(#"Decorated 'Product_Name' (Fix ""Magsafe"")"," Id"," ID",Replacer.ReplaceText,{"Product_Name"}),
+				    #"Cleaned 'Country' (Capitalized)" = Table.TransformColumns(#"Decorated 'Product_Name' (Fix ""Id"")",{{"Country", Text.Proper, type text}}),
+				    #"Cleaned 'Country' (Trim)" = Table.TransformColumns(#"Cleaned 'Country' (Capitalized)",{{"Country", Text.Trim, type text}}),
+				    #"Decorated 'Country' (fix ""Uae"")" = Table.ReplaceValue(#"Cleaned 'Country' (Trim)","Uae","UAE",Replacer.ReplaceText,{"Country"}),
+				    #"Cleaned 'City' (Trim)" = Table.TransformColumns(#"Decorated 'Country' (fix ""Uae"")",{{"City", Text.Trim, type text}}),
+				    #"Cleaned 'City' (Capitalized)" = Table.TransformColumns(#"Cleaned 'City' (Trim)",{{"City", Text.Proper, type text}}),
+				    #"Cleaned 'Store_Name' (Trim)" = Table.TransformColumns(#"Cleaned 'City' (Capitalized)",{{"Store_Name", Text.Trim, type text}}),
+				    #"Cleaned 'Store_Name' (Capitalized)" = Table.TransformColumns(#"Cleaned 'Store_Name' (Trim)",{{"Store_Name", Text.Proper, type text}}),
+				    #"Cleaned IDs (Trim)" = Table.TransformColumns(#"Cleaned 'Store_Name' (Capitalized)",{{"Sale_ID", Text.Trim, type text}, {"Store_ID", Text.Trim, type text}, {"Product_ID", Text.Trim, type text}, {"Category_ID", Text.Trim, type text}}),
+				    #"Removed Duplicates" = Table.Distinct(#"Cleaned IDs (Trim)"),
+				    #"Added Conditional Column" = Table.AddColumn(#"Removed Duplicates", "Corrected_Categories", each if Text.Contains([Product_Name], "HomePod") then "Smart Speakers" else [Category_Name]),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Added Conditional Column",{{"Corrected_Categories", type text}}),
+				    #"Added Conditional Column1" = Table.AddColumn(#"Changed Type1", "Corrected_Category_ID", each if [Corrected_Categories] = "Smart Speakers" then "CAT-9" else [Category_ID]),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Added Conditional Column1",{{"Corrected_Category_ID", type text}})
+				in
+				    #"Changed Type2"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

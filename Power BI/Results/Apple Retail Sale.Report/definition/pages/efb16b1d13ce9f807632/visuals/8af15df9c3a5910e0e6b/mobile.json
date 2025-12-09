@@ -1,0 +1,29 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainerMobileState/2.2.0/schema.json",
+  "position": {
+    "x": 0,
+    "y": 83,
+    "z": 8000,
+    "height": 54,
+    "width": 159,
+    "tabOrder": 8000
+  },
+  "objects": {
+    "shape": [
+      {
+        "properties": {
+          "rectangleRoundedCurve": {
+            "expr": {
+              "Literal": {
+                "Value": "10L"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "rotation": [],
+    "fill": [],
+    "text": []
+  }
+}

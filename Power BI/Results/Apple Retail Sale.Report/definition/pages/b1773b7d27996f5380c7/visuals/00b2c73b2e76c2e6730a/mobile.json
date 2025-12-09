@@ -1,0 +1,83 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainerMobileState/2.2.0/schema.json",
+  "position": {
+    "x": 71,
+    "y": 0,
+    "z": 8000,
+    "height": 74,
+    "width": 253,
+    "tabOrder": 8000
+  },
+  "objects": {
+    "general": [
+      {
+        "properties": {
+          "paragraphs": [
+            {
+              "textRuns": [
+                {
+                  "value": "Desktop",
+                  "textStyle": {
+                    "fontWeight": "bold",
+                    "fontFamily": "Arial",
+                    "fontSize": "32pt",
+                    "color": "#ffffff"
+                  }
+                }
+              ],
+              "horizontalTextAlignment": "center"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "visualContainerObjects": {
+    "background": [
+      {
+        "properties": {
+          "show": {
+            "expr": {
+              "Literal": {
+                "Value": "true"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "border": [
+      {
+        "properties": {
+          "show": {
+            "expr": {
+              "Literal": {
+                "Value": "true"
+              }
+            }
+          },
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "ThemeDataColor": {
+                    "ColorId": 1,
+                    "Percent": 0
+                  }
+                }
+              }
+            }
+          },
+          "radius": {
+            "expr": {
+              "Literal": {
+                "Value": "10D"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "title": []
+  }
+}

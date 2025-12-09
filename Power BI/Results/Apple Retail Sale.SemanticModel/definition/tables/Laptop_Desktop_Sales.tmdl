@@ -1,0 +1,178 @@
+table Laptop_Desktop_Sales
+	lineageTag: be29c6fb-3e2f-44b6-8a94-6fb4b3d80fda
+
+	column Sale_ID
+		lineageTag: 505eee57-a89c-441c-a29b-6639f15f5017
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: sales[Sale_ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sale_Date
+		formatString: General Date
+		lineageTag: bc4d2ff2-8908-4c39-b7c3-97c2c2c866cc
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: sales[Sale_Date]
+
+		variation Variation
+			isDefault
+			relationship: 39f1305f-c701-4ec5-bd24-a80dc3ee7717
+			defaultHierarchy: LocalDateTable_09eaf5b1-8607-48a9-b922-f5353fd73f48.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Store_ID
+		lineageTag: 49b5fc7c-1461-4683-88ae-55010a32bd38
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: sales[Store_ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product_ID
+		lineageTag: 187f67f4-5e23-4cb3-ad06-9200e881c3ef
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: sales[Product_ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity
+		formatString: 0
+		lineageTag: 76f56786-28a9-4b65-acd0-33ab8406d0d6
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: sales[Quantity]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Store_Name
+		lineageTag: 1be627cd-d99a-4022-b6b4-5b6ac22f3a7a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: sales[Store_Name]
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		lineageTag: a1705d67-0436-4ac7-8a99-59d9a1cd94f2
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: sales[City]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		lineageTag: 2242163c-5964-44db-8b60-ae4088be5023
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: sales[Country]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product_Name
+		lineageTag: 65c4ddab-fcf3-494f-be71-d62112574395
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: sales[Product_Name]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category_ID
+		lineageTag: 27f164aa-dd84-4482-a975-22877f80d664
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: sales[Category_ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Launch_Date
+		formatString: General Date
+		lineageTag: 64bd0aa9-74e9-446c-9e37-8687832808d7
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: sales[Launch_Date]
+
+		variation Variation
+			isDefault
+			relationship: 9e6d3cd0-f9de-440b-b60a-9f47a7cd05ad
+			defaultHierarchy: LocalDateTable_d6b996eb-5db8-4944-b8b8-edf79f8f066d.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Unit_Price
+		formatString: 0
+		lineageTag: ba26c801-be70-4844-b84f-6c11765e77cd
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: sales[Unit_Price]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category_Name
+		lineageTag: 5a623ef0-7c3e-458a-95c1-40d27dfe4727
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: sales[Category_Name]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sales
+		formatString: 0
+		lineageTag: a13de645-2379-49c0-879b-0e1d2819f88d
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: sales[Sales]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Corrected_Categories
+		lineageTag: be1457f0-0e38-4270-83e7-db0dfa9538cc
+		isNameInferred
+		sourceColumn: sales[Corrected_Categories]
+
+	column Corrected_Category_ID
+		lineageTag: 59d4fb53-2b48-4921-989f-41f1d66c53d8
+		isNameInferred
+		sourceColumn: sales[Corrected_Category_ID]
+
+	column 'Price Category.Yara'
+		lineageTag: 77d0ef8b-66d3-47f1-a10e-22939b4e0fba
+		isNameInferred
+		sourceColumn: sales[Price Category.Yara]
+
+	column 'Sale Month_ALI_FADLOUN'
+		lineageTag: 20e2d440-cb1d-4a4b-a4d7-41cd81dc33ec
+		isNameInferred
+		sourceColumn: sales[Sale Month_ALI_FADLOUN]
+
+	column 'Sale Year_ALI_FADLOUN'
+		lineageTag: 9091f93b-afeb-4362-a41a-2f026ecd1d8f
+		isNameInferred
+		sourceColumn: sales[Sale Year_ALI_FADLOUN]
+
+	column 'Sale MonthName_ALI_FADLOUN'
+		lineageTag: 4de138e3-fa56-454f-98c9-c0cd62c43f59
+		isNameInferred
+		sourceColumn: sales[Sale MonthName_ALI_FADLOUN]
+
+	column 'Sale day_ALI_FADLOUN'
+		lineageTag: 4ab91c36-f9fe-4c23-8c12-aa991e42543b
+		isNameInferred
+		sourceColumn: sales[Sale day_ALI_FADLOUN]
+
+	partition Laptop_Desktop_Sales = calculated
+		mode: import
+		source = ```
+				
+				FILTER (
+				    Sales,
+				    Sales[Category_Name] IN { "Laptop", "Desktop" }
+				)
+				
+				```
+
+	annotation PBI_Id = 0a30fab5dccf40cd8b9fc9a060e2a399
+

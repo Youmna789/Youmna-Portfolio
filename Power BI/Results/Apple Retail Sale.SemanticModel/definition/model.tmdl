@@ -1,0 +1,30 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		fastCombine
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["sales","warranty","Products (Abdallah)"]
+
+annotation PBI_ProTooling = ["DevMode","DaxQueryView_Desktop"]
+
+ref table sales
+ref table DateTableTemplate_c82e7a73-b6df-492d-b2fb-77a6b457b562
+ref table LocalDateTable_be714883-66f5-4c1a-8ffd-18ee6357700f
+ref table warranty
+ref table LocalDateTable_a00715d5-4890-41e1-8107-e5564ee9646e
+ref table 'Products (Abdallah)'
+ref table LocalDateTable_6b055ecf-1c43-4e5d-8a69-c4353c4c85a2
+ref table 'Running_Date (Abdallah)'
+ref table LocalDateTable_8899f6d4-ad28-452d-abf3-4c7edebc459b
+ref table Laptop_Desktop_Sales
+ref table LocalDateTable_09eaf5b1-8607-48a9-b922-f5353fd73f48
+ref table LocalDateTable_d6b996eb-5db8-4944-b8b8-edf79f8f066d
+
+ref cultureInfo en-US
+

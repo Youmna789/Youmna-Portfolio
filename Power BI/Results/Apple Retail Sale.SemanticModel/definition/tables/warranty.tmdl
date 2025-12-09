@@ -1,0 +1,117 @@
+table warranty
+	lineageTag: f9eb3308-9b92-4d67-a598-a174efefb435
+
+	measure 'Total Claims_ALI_FADLOUN' = COUNT(warranty[Claim_ID])
+		formatString: 0
+		lineageTag: 379ec40f-35b9-49ea-a27e-a9a05426b40b
+
+	measure 'Claims per Product_ALI_FADLOUN' = ```
+			DIVIDE([Total Claims_ALI_FADLOUN], [Distinct Products_ALI_FADLOUN])
+			
+			```
+		lineageTag: e6831548-a88e-4ba1-9ae6-76a2b7d766ee
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Top Store by Claims_ALI_FADLOUN' = ```
+			
+			CALCULATE(
+			    SELECTEDVALUE(Sales[Store_Name]),
+			    TOPN(
+			        1,
+			        VALUES(Sales[Store_Name]),
+			        CALCULATE(COUNT(warranty[Claim_ID])),
+			        DESC
+			    )
+			)
+			
+			```
+		lineageTag: d0e02d30-d5f0-45b2-8cd4-dfd09eb3991f
+
+	column Claim_ID
+		dataType: string
+		lineageTag: 68852557-758a-4ac1-9c65-a96dd0494ed8
+		summarizeBy: none
+		sourceColumn: Claim_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Claim_Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: b391ecf5-39dd-4ad5-89d9-86672b021f21
+		summarizeBy: none
+		sourceColumn: Claim_Date
+
+		variation Variation
+			isDefault
+			relationship: c51247a1-683d-4949-a344-1f37a677673e
+			defaultHierarchy: LocalDateTable_a00715d5-4890-41e1-8107-e5564ee9646e.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Sale_ID
+		dataType: string
+		lineageTag: 05b4db85-1942-4110-91e2-fd83d4d659b6
+		summarizeBy: none
+		sourceColumn: Sale_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Repair_Status
+		dataType: string
+		lineageTag: a02adb39-94b0-4446-9cd1-c140f13b2e48
+		summarizeBy: none
+		sourceColumn: Repair_Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'claim Month_ALI_FADLOUN' = MONTH(warranty[Claim_Date])
+		formatString: 0
+		lineageTag: 84154eb7-3b09-4db5-8f3c-a0bf9d574f62
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'claim MonthName_ALI_FADLOUN' = ```
+			FORMAT(warranty[Claim_Date], "MMMM")
+			
+			```
+		lineageTag: c1075a49-63f2-4f61-9abb-d6a8ab0fe8f5
+		summarizeBy: none
+		sortByColumn: 'claim Month_ALI_FADLOUN'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'cailm Year_ALI_FADLOUN' = ```
+			YEAR(warranty[Claim_Date])
+			
+			```
+		formatString: 0
+		lineageTag: d238dfff-1251-4c5b-8414-2e3c449dada0
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition warranty = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("F:\My Project\DEPI-Project\Raw Data\warranty.csv"),[Delimiter=",", Columns=4, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"claim_id", type text}, {"claim_date", type date}, {"sale_id", type text}, {"repair_status", type text}}),
+				    #"Cleaned IDs (Trim)" = Table.TransformColumns(#"Changed Type",{{"sale_id", Text.Trim, type text}, {"claim_id", Text.Trim, type text}}),
+				    #"Renamed Some Columns" = Table.RenameColumns(#"Cleaned IDs (Trim)",{{"claim_id", "Claim_ID"}, {"claim_date", "Claim_Date"}, {"sale_id", "Sale_ID"}, {"repair_status", "Repair_Status"}}),
+				    #"Cleaned 'Repair_Status' (Trim)" = Table.TransformColumns(#"Renamed Some Columns",{{"Repair_Status", Text.Trim, type text}}),
+				    #"Cleaned 'Repair_Status' (Capitalized)" = Table.TransformColumns(#"Cleaned 'Repair_Status' (Trim)",{{"Repair_Status", Text.Proper, type text}})
+				in
+				    #"Cleaned 'Repair_Status' (Capitalized)"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

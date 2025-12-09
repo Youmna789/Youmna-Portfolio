@@ -1,0 +1,40 @@
+table 'Running_Date (Abdallah)'
+	lineageTag: 88f25bfa-02f2-4d2f-8b0d-56dfe20638d8
+
+	column Date
+		formatString: General Date
+		lineageTag: 2e0482cf-9aaa-49fb-96e1-5fcfdef30759
+		summarizeBy: none
+		sourceColumn: [Date]
+
+		variation Variation
+			isDefault
+			relationship: 28f94f53-cda0-4ffd-be3c-929a8c0f0666
+			defaultHierarchy: LocalDateTable_8899f6d4-ad28-452d-abf3-4c7edebc459b.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		formatString: 0
+		lineageTag: 1d884dec-3368-4cc3-ac01-f474ac5e360d
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		formatString: 0
+		lineageTag: 45adfcfd-860d-4f2e-b497-153410b29469
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Month]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Running_Date (Abdallah)' = calculated
+		mode: import
+		source = ADDCOLUMNS(CALENDAR(MIN(sales[Sale_Date]), MAX(sales[Sale_Date])),"Year", YEAR([Date]), "Month", MONTH([Date]))
+
+	annotation PBI_Id = 08e47cd2e3f049aa82f23320c2449d8a
+
