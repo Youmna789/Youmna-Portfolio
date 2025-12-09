@@ -23,7 +23,7 @@ Category-level claim distribution
 
 The final Excel dashboard contains the following visual insights:
 
-1️) Claim Status by Product
+1) Claim Status by Product
 
 Comparison between Completed vs Rejected claims
 
@@ -31,7 +31,7 @@ Bar charts showing claim volume for each Apple product
 
 Helps identify which products have the highest failure rates
 
-2️) Country Claim Distribution
+2) Country Claim Distribution
 
 Pie chart showing % share of claims from:
 
@@ -43,7 +43,7 @@ Japan
 
 United States
 
-3️)Claim Rate per Product
+3)Claim Rate per Product
 
 Claim rate calculated as:
 (Total Claims / Total Sales) × 100  (calculated measure)
@@ -52,7 +52,7 @@ Shows which products perform best in terms of reliability
 
 Visual comparison using a column chart
 
-4️) Claims by Product Category
+4) Claims by Product Category
 
 Categories include:
 
@@ -74,7 +74,7 @@ Subscription Services
 
 Provides a clear breakdown and a horizontal bar chart.
 
-5️) Top 5 Stores
+5) Top 5 Stores
 
 Shows the stores with the highest number of sold units:
 
@@ -88,7 +88,7 @@ Apple Central World
 
 Apple Orchard Road
 
-6️) Total Sales by Product
+6) Total Sales by Product
 
 Final visualization summarizing overall sales distribution across selected Apple products.
 
@@ -129,5 +129,6 @@ Claim rates across Apple products are very close (around 0.56% on average).
 Top-selling products include Apple Watch Series 7, Apple Watch Series 9, and HomePod mini.
 
 USA accounts for the largest share of warranty claims.
+
 
 Accessories and smartphones have the highest claim volume.
