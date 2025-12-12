@@ -1,0 +1,135 @@
+Overview
+
+This repository contains a collection of SQL assignments completed on two relational database systems: Company_SD and BikeStores.
+The scripts demonstrate strong SQL fundamentals and intermediate–advanced querying skills through real business scenarios including HR management, sales analytics, product data, and customer behavior.
+
+The 5 SQL files cover the following domains:
+
+Data Manipulation (INSERT, UPDATE, DELETE)
+
+Data Retrieval (SELECT queries)
+
+Joins (Inner, Outer, Self, Multi-table)
+
+Subqueries (Single-row, Multi-row, ANY, ALL, IN)
+
+Aggregation & Grouping
+
+String Functions, Date Functions & Data Cleaning
+
+Sales Performance Calculations
+
+Set Operations (UNION, INTERSECT, EXCEPT)
+
+Window-style pagination (TOP, OFFSET … FETCH)
+
+Business Logic Queries (Managers, Supervisors, Store performance)
+
+--Included Files
+1. SQLQuery1 – Company_SD
+
+Key topics:
+
+DML operations (insert/update/delete)
+
+Updating managers and supervisors
+
+Salary recalculations
+
+Basic SELECT statements
+
+Joins (Inner, Left/Right, Full, Self)
+
+Cross join
+
+3-table join with Employee, Project, Works_for
+
+2. SQLQuery2 – Company_SD
+
+Key topics:
+
+Multi-table joins (Departments, Employees, Projects, Dependents)
+
+Pattern matching (LIKE)
+
+Conditional filtering (BETWEEN, AND/OR)
+
+Manager & Supervisor logic using:
+
+LEFT JOIN
+
+UNION, INTERSECT, EXCEPT
+
+Displaying all managers, supervisors, or both
+
+Finding employees on specific projects with minimum work hours
+
+3. SQLQuery3 – Company_SD
+
+Key topics:
+
+Subqueries (ANY, ALL, IN)
+
+Salary comparisons using nested queries
+
+Aggregations: MAX, MIN, SUM, AVG, COUNT
+
+GROUP BY with HAVING
+
+Execution order of SQL SELECT statements
+
+Department-level salary stats
+
+4. SQLQuery4 – BikeStores
+
+Key topics:
+
+Store-level sales performance
+
+Monthly revenue calculations
+
+Top customers by order count
+
+Best-selling products
+
+Identifying customers with highest activity
+
+Cheapest vs most expensive products per customer
+
+Products ordered more than 100 units
+
+Staff filtering
+
+Price-based product filtering
+
+Unordered products (LEFT JOIN + NULL filter)
+
+5. SQLQuery5 – BikeStores
+
+Key topics:
+
+String manipulation & data cleaning using:
+
+CONCAT, LEFT, RIGHT, SUBSTRING
+
+LEN, TRIM, REVERSE, REPLACE
+
+CHARINDEX, UPPER, LOWER
+
+Extracting:
+
+First/last name from email
+
+Username
+
+Domain & extension
+
+Pattern matching using ranges (e.g., [k-o]%)
+
+Handling NULL values with ISNULL
+
+Categorizing products using CASE
+
+Deriving subcategory types from product/category names
+
+This assignment demonstrates strong data-preparation and text-processing abilities.
